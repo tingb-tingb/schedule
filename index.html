@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="排班助手">
+    <link rel="apple-touch-icon" href="icon-192.svg">
+    <link rel="icon" href="icon-192.svg">
+    <link rel="manifest" href="manifest.json">
+    <title>排班助手</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>📅 排班助手</h1>
+            <div class="header-btns">
+                <button class="btn-settings" id="btnSearch">🔍 搜索</button>
+                <button class="btn-settings" id="btnBg">🖼️ 背景</button>
+                <button class="btn-settings" id="btnSettings">⚙️ 班次</button>
+            </div>
+        </header>
+
+        <!-- 月份导航 -->
+        <div class="month-nav">
+            <button class="btn-nav" id="btnPrev">◀</button>
+            <span class="month-title" id="monthTitle"></span>
+            <button class="btn-nav" id="btnNext">▶</button>
+        </div>
+
+        <!-- 星期标题 -->
+        <div class="weekdays">
+            <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+        </div>
+
+        <!-- 日历网格 -->
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <!-- 图例 -->
+        <div class="legend" id="legend"></div>
+
+        <!-- 三薪提示 -->
+        <div class="triple-pay-tip" id="triplePayTip"></div>
+
+        <!-- 当月日程列表 -->
+        <div class="memo-list" id="memoList"></div>
+    </div>
+
+    <!-- 搜索日程弹窗 -->
+    <div class="modal-overlay" id="searchModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>🔍 搜索日程</h2>
+                <button class="btn-close" id="btnCloseSearch">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="输入关键词搜索日程..." autocomplete="off">
+                    <button class="btn-search" id="btnDoSearch">搜索</button>
+                </div>
+
+                <!-- 时间范围筛选 -->
+                <div class="search-filter">
+                    <div class="filter-label">时间范围：</div>
+                    <div class="filter-quick-months" id="filterQuickMonths"></div>
+                    <div class="filter-custom">
+                        <input type="date" id="filterStart" class="filter-date-input">
+                        <span class="filter-sep">至</span>
+                        <input type="date" id="filterEnd" class="filter-date-input">
+                    </div>
+                </div>
+
+                <div class="search-results" id="searchResults"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 背景设置弹窗 -->
+    <div class="modal-overlay" id="bgModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h2>背景设置</h2>
+                <button class="btn-close" id="btnCloseBg">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="bg-preview" id="bgPreview">
+                    <span class="bg-placeholder" id="bgPlaceholder">暂无背景图</span>
+                </div>
+                <div class="bg-actions">
+                    <label class="btn-upload" for="bgFileInput">📁 上传图片</label>
+                    <input type="file" id="bgFileInput" accept="image/*" hidden>
+                    <button class="btn-remove-bg" id="btnRemoveBg">移除背景</button>
+                </div>
+                <p class="bg-tip">建议使用手机竖屏尺寸的图片效果更佳</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 班次设置弹窗 -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>班次设置</h2>
+                <button class="btn-close" id="btnCloseSettings">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="shift-list" id="shiftList"></div>
+                <div class="add-shift">
+                    <input type="text" id="newShiftName" placeholder="班次名称（如：早班）" maxlength="6">
+                    <input type="color" id="newShiftColor" value="#4CAF50">
+                    <button class="btn-add" id="btnAddShift">添加</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 选择班次弹窗 -->
+    <div class="modal-overlay" id="selectShiftModal">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h2 id="selectShiftTitle">选择班次</h2>
+                <button class="btn-close" id="btnCloseSelect">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="shift-options" id="shiftOptions"></div>
+                <button class="btn-clear" id="btnClearShift">清除排班</button>
+
+                <!-- 日程编辑区 -->
+                <div class="memo-section">
+                    <h3 class="memo-title">📝 今日日程</h3>
+                    <textarea class="memo-input" id="memoInput" placeholder="记录今天的日程安排..." rows="3"></textarea>
+                    <button class="btn-save-memo" id="btnSaveMemo">保存日程</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // 注册 Service Worker，支持离线使用
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js');
+        }
+    </script>
+</body>
+</html>
