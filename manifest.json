@@ -1,0 +1,16 @@
+{
+    "name": "排班助手",
+    "short_name": "排班",
+    "description": "自定义班次排班管理工具",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#f0f2f5",
+    "theme_color": "#4CAF50",
+    "icons": [
+        {
+            "src": "icon-192.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}
